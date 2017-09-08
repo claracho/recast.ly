@@ -6,6 +6,12 @@ class App extends React.Component {
       video: exampleVideoData[0]
     };
   }
+  
+  onTitleClick(newvid) {
+    this.setState({
+      video: newvid
+    });
+  }
 
   render() {
     return (
@@ -20,7 +26,7 @@ class App extends React.Component {
             <div><VideoPlayer video={this.state.video}/></div>
           </div>
           <div className="col-md-5">
-            <div><VideoList videos={this.state.videos}/></div>
+            <div><VideoList onTitleClick={this.onTitleClick.bind(this)} videos={this.state.videos}/></div>
           </div>
         </div>
       </div>
