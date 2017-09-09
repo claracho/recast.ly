@@ -5,12 +5,22 @@ class App extends React.Component {
       videos: exampleVideoData,
       video: exampleVideoData[0]
     };
+    this.searchYouTube = props.searchYouTube;
+    this.setVideos = _.throttle(this.setVideos.bind(this), 500);
   }
-  
+
   onTitleClick(newvid) {
     this.setState({
       video: newvid
     });
+  }
+  
+  componentDidMount() {
+    this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'query': 'test', 'max': 5 }, (data) => this.setState({videos: data, video: data[0] }));
+  }
+
+  setVideos(query) {
+    this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'query': query, 'max': 5 }, (data) => this.setState({videos: data, video: data[0] }));
   }
 
   render() {
@@ -18,7 +28,7 @@ class App extends React.Component {
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <div><Search /></div>
+            <div><Search setVideos={this.setVideos.bind(this)}/></div>
           </div>
         </nav>
         <div className="row">
