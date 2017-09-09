@@ -3,7 +3,9 @@ class App extends React.Component {
     super(props);
     this.state = {
       videos: exampleVideoData,
-      video: exampleVideoData[0]
+      video: exampleVideoData[0],
+      autoplay: '1',
+      autoplayImage: 'ON'
     };
     this.searchYouTube = props.searchYouTube;
     this.setVideos = _.throttle(this.setVideos.bind(this), 500);
@@ -14,7 +16,14 @@ class App extends React.Component {
       video: newvid
     });
   }
-  
+
+  onAutoPlay(event) {
+    this.setState({
+      autoplay: !this.state.autoplay,
+      autoplayImage: !this.state.autoplay ? 'ON' : 'OFF'
+    });
+  }  
+
   componentDidMount() {
     this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'query': 'test', 'max': 5 }, (data) => this.setState({videos: data, video: data[0] }));
   }
@@ -33,8 +42,10 @@ class App extends React.Component {
         </nav>
         <div className="row">
           <div className="col-md-7">
-            <div><VideoPlayer video={this.state.video}/></div>
+            <div><VideoPlayer autoplay={this.state.autoplay} video={this.state.video}/></div>
+            <span>Autoplay </span><button type="button" className="btn" onClick={(event)=> this.onAutoPlay(event)}>{this.state.autoplayImage}</button>
           </div>
+
           <div className="col-md-5">
             <div><VideoList onTitleClick={this.onTitleClick.bind(this)} videos={this.state.videos}/></div>
           </div>
