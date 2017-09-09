@@ -15,6 +15,8 @@ class App extends React.Component {
     this.setState({
       video: newvid
     });
+    this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'id': this.state.video.id.videoId }, (data) => this.setState({video: data }), 'video');
+    console.log(this.state.video);
   }
 
   onAutoPlay(event) {
@@ -25,11 +27,14 @@ class App extends React.Component {
   }  
 
   componentDidMount() {
-    this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'query': 'test', 'max': 5 }, (data) => this.setState({videos: data, video: data[0] }));
+    this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'query': 'test', 'max': 5 }, (data) => this.setState({videos: data, video: data[0] }), 'list');
+    this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'id': this.state.video.id.videoId }, (data) => this.setState({video: data }), 'video');
+
   }
 
   setVideos(query) {
-    this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'query': query, 'max': 5 }, (data) => this.setState({videos: data, video: data[0] }));
+    this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'query': query, 'max': 5 }, (data) => this.setState({videos: data, video: data[0] }), 'list');
+    this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'id': this.state.video.id.videoId }, (data) => this.setState({video: data }), 'video');
   }
 
   render() {
