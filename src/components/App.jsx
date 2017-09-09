@@ -9,14 +9,14 @@ class App extends React.Component {
     };
     this.searchYouTube = props.searchYouTube;
     this.setVideos = _.throttle(this.setVideos.bind(this), 500);
+    this.setVideos('test');
   }
 
   onTitleClick(newvid) {
     this.setState({
       video: newvid
     });
-    this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'id': this.state.video.id.videoId }, (data) => this.setState({video: data }), 'video');
-    console.log(this.state.video);
+    this.setVideoDetails(newvid);
   }
 
   onAutoPlay(event) {
@@ -27,14 +27,19 @@ class App extends React.Component {
   }  
 
   componentDidMount() {
-    this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'query': 'test', 'max': 5 }, (data) => this.setState({videos: data, video: data[0] }), 'list');
-    this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'id': this.state.video.id.videoId }, (data) => this.setState({video: data }), 'video');
-
+    this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'query': 'test', 'max': 5 }, 
+      (data) => { this.setState({videos: data}); this.setVideoDetails(data[0]); }, 
+      'list');
   }
 
   setVideos(query) {
-    this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'query': query, 'max': 5 }, (data) => this.setState({videos: data, video: data[0] }), 'list');
-    this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'id': this.state.video.id.videoId }, (data) => this.setState({video: data }), 'video');
+    this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'query': query, 'max': 5 }, 
+      (data) => { this.setState({videos: data}); this.setVideoDetails(data[0]); }, 
+      'list');
+  }
+
+  setVideoDetails(video) {
+    this.searchYouTube({ 'key': window.YOUTUBE_API_KEY, 'id': video.id.videoId }, (data) => this.setState({video: data }), 'video'); 
   }
 
   render() {
